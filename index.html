@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Diet Plan">
+<meta name="theme-color" content="#0f3d2e">
+<title>My Diet Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #0f3d2e;
+    --green-mid: #1a6b4a;
+    --green-bright: #2ecc8a;
+    --green-pale: #d4f5e7;
+    --amber: #f5a623;
+    --amber-pale: #fff4dc;
+    --coral: #e8604c;
+    --coral-pale: #fdecea;
+    --blue: #2563eb;
+    --blue-pale: #eff6ff;
+    --bg: #f5f7f5;
+    --card: #ffffff;
+    --text: #111;
+    --muted: #6b7b72;
+    --border: #e2ece7;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* Header */
+  .header { background: var(--green-dark); color: white; padding: 52px 20px 20px; position: sticky; top: 0; z-index: 100; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .header h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .header-sub { font-size: 13px; opacity: 0.65; margin-top: 2px; }
+  .badge-green { background: var(--green-bright); color: var(--green-dark); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; font-family: 'Syne', sans-serif; }
+
+  /* Macro strip */
+  .macro-strip { background: var(--green-mid); padding: 12px 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .macro-item { text-align: center; }
+  .macro-val { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: white; }
+  .macro-lbl { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 1px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Day nav */
+  .day-nav { padding: 16px 20px 0; overflow-x: auto; display: flex; gap: 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .day-nav::-webkit-scrollbar { display: none; }
+  .day-btn { flex-shrink: 0; padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 30px; background: var(--card); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+  .day-btn.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+  .day-btn.veg.active { background: var(--green-mid); border-color: var(--green-mid); }
+
+  /* Veg badge */
+  .veg-pill { display: none; align-items: center; gap: 6px; margin: 12px 20px 0; background: #e8f7ef; border: 1px solid #a8dfc0; border-radius: 30px; padding: 6px 14px; font-size: 12px; color: var(--green-mid); font-weight: 500; width: fit-content; }
+  .veg-pill.show { display: flex; }
+
+  /* Timeline */
+  .timeline { padding: 16px 20px 100px; display: flex; flex-direction: column; gap: 0; }
+  .t-row { display: grid; grid-template-columns: 56px 1fr; gap: 0; position: relative; }
+  .t-row:not(:last-child) .t-line { position: absolute; left: 56px; top: 36px; bottom: 0; width: 1.5px; background: var(--border); transform: translateX(-50%); z-index: 0; }
+  .t-time { display: flex; flex-direction: column; align-items: center; padding-top: 14px; gap: 6px; }
+  .t-time span { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.3; }
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid white; position: relative; z-index: 1; }
+  .t-card { margin: 8px 0 8px 12px; border-radius: var(--radius); border: 1.5px solid var(--border); background: var(--card); padding: 14px 16px; transition: transform 0.15s; }
+  .t-card:active { transform: scale(0.98); }
+  .t-card.drink { border-color: #a8dfc0; background: #f0fbf5; }
+  .t-card.snack { border-color: #f5d9a0; background: var(--amber-pale); }
+
+  .slot-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+  .slot-tag.drink { color: var(--green-mid); }
+  .slot-tag.main { color: var(--blue); }
+  .slot-tag.snack { color: #b07c10; }
+
+  .meal-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.3; }
+  .meal-items { list-style: none; font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 10px; }
+  .meal-items li::before { content: "· "; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
+  .badge.prot { background: var(--blue-pale); color: var(--blue); }
+  .badge.kcal { background: var(--coral-pale); color: var(--coral); }
+  .badge.fat { background: #e8f7ef; color: var(--green-mid); }
+  .badge.snk { background: var(--amber-pale); color: #8c6010; }
+
+  .why { font-size: 11px; color: var(--green-mid); margin-top: 8px; font-style: italic; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px; }
+
+  /* Protein bar */
+  .pb-wrap { margin: 0 20px 20px; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+  .pb-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .pb-track { background: var(--border); border-radius: 4px; height: 7px; }
+  .pb-fill { height: 7px; border-radius: 4px; background: var(--green-bright); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  /* Bottom install hint */
+  .install-hint { position: fixed; bottom: 0; left: 0; right: 0; background: var(--green-dark); color: white; padding: 12px 20px 28px; font-size: 12px; text-align: center; opacity: 0.9; z-index: 200; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .install-hint button { background: var(--green-bright); color: var(--green-dark); border: none; border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  @media (min-width: 480px) {
+    .header { padding-top: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>💪 My Diet Plan</h1>
+      <div class="header-sub">83kg · 5'7" · Strength training · Fat loss</div>
+    </div>
+    <span class="badge-green">5 meals/day</span>
+  </div>
+</div>
+
+<div class="macro-strip">
+  <div class="macro-item"><div class="macro-val" id="cv">–</div><div class="macro-lbl">Calories</div></div>
+  <div class="macro-item"><div class="macro-val" id="pv">–</div><div class="macro-lbl">Protein</div></div>
+  <div class="macro-item"><div class="macro-val">~270g</div><div class="macro-lbl">Carbs</div></div>
+  <div class="macro-item"><div class="macro-val">~65g</div><div class="macro-lbl">Fats</div></div>
+</div>
+
+<div class="day-nav" id="dayNav"></div>
+<div class="veg-pill" id="vegPill">🌿 Vegetarian day — no meat</div>
+
+<div class="pb-wrap">
+  <div class="pb-top"><span>Daily protein goal: 166g</span><span id="pb-txt">–</span></div>
+  <div class="pb-track"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
+</div>
+
+<div class="timeline" id="timeline"></div>
+
+<div class="install-hint" id="installHint">
+  📲 Add to home screen for app access &nbsp;
+  <button onclick="document.getElementById('installHint').style.display='none'">Got it</button>
+</div>
+
+<script>
+const morningDrinks = [
+  { name: "Jeera + lemon warm water", items: ["1 tsp cumin seeds boiled", "Juice of half lemon", "250ml warm water, empty stomach"], why: "Boosts metabolism, reduces belly bloating" },
+  { name: "ACV + lemon water", items: ["1 tbsp apple cider vinegar", "Juice of half lemon", "250ml warm water", "Pinch of cinnamon"], why: "Improves insulin sensitivity, burns visceral fat" },
+  { name: "Ginger + turmeric water", items: ["½ tsp grated ginger", "¼ tsp turmeric", "Juice of half lemon", "250ml warm water"], why: "Anti-inflammatory, targets belly fat" },
+  { name: "Cinnamon + honey water", items: ["½ tsp cinnamon powder", "1 tsp raw honey", "250ml warm water"], why: "Regulates blood sugar, reduces fat storage" },
+  { name: "Jeera + coriander detox water", items: ["1 tsp jeera seeds", "1 tsp coriander seeds (soak overnight)", "Strain and drink warm"], why: "Flushes toxins, reduces water retention" },
+  { name: "Green tea + lemon", items: ["1 cup plain green tea (no sugar)", "Juice of half lemon", "Drink 15 min before workout"], why: "EGCG in green tea directly targets belly fat" },
+  { name: "ACV + ginger shot", items: ["1 tbsp apple cider vinegar", "½ tsp grated ginger juice", "200ml warm water"], why: "Powerful fat-burn combo, suppresses appetite" }
+];
+
+const eveningSnacks = [
+  { name: "Roasted chana + cucumber", items: ["50g roasted chana (Bengal gram)", "1 cup sliced cucumber", "Chaat masala + lemon"], prot: 12, kcal: 180, why: "High fibre + protein, kills evening cravings" },
+  { name: "Boiled eggs + black pepper", items: ["2 boiled eggs", "Black pepper + rock salt", "5–6 almonds on side"], prot: 14, kcal: 190, why: "Pure protein, zero carbs, keeps you full" },
+  { name: "Paneer cubes + veggies", items: ["75g raw paneer cubes", "Sliced cucumber + tomato", "Lemon + chaat masala"], prot: 15, kcal: 200, why: "Casein protein — slow digesting, fat burn overnight" },
+  { name: "Greek yogurt + seeds", items: ["150g plain Greek yogurt (no sugar)", "1 tsp flax + 1 tsp chia seeds", "Pinch of cinnamon"], prot: 14, kcal: 175, why: "Probiotic + omega-3 combo fights belly fat" },
+  { name: "Makhana + green tea", items: ["30g roasted makhana", "1 cup plain green tea", "Light salt + pepper on makhana"], prot: 5, kcal: 130, why: "Very low calorie, satisfies crunch cravings" },
+  { name: "Sprouts chaat", items: ["100g mixed sprouts (moong + chana)", "Onion + tomato + lemon", "Chaat masala + green chutney"], prot: 11, kcal: 165, why: "Enzyme-rich, excellent for fat metabolism" },
+  { name: "Cottage cheese + walnuts", items: ["100g low-fat paneer/cottage cheese", "4–5 walnut halves", "Black pepper + lemon squeeze"], prot: 16, kcal: 210, why: "Omega-3 in walnuts specifically reduces belly fat" }
+];
+
+const meals = {
+  0:{name:"Monday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Egg & oats power bowl",items:["4 whole eggs scrambled","1 cup rolled oats","1 banana","1 tbsp peanut butter","1 glass milk"],prot:42,kcal:620},lu:{icon:"🍗",slot:"Lunch",name:"Grilled chicken rice bowl",items:["200g grilled chicken breast","1.5 cups brown rice","Mixed veggies stir-fry","Curd 100g"],prot:68,kcal:780},di:{icon:"🥩",slot:"Dinner",name:"Paneer + egg wrap",items:["3 boiled eggs","100g paneer bhurji","2 whole wheat rotis","Cucumber raita 100g","Salad"],prot:58,kcal:620}},
+  1:{name:"Tuesday",veg:true,bf:{icon:"🥛",slot:"Breakfast",name:"Moong dal chilla",items:["3 moong dal chilla","Paneer stuffing 75g","Greek yogurt 150g","1 glass milk"],prot:40,kcal:540},lu:{icon:"🧆",slot:"Lunch",name:"Rajma rice + soya",items:["1 cup rajma curry","1.5 cups brown rice","Soya chunks 50g dry","Salad + buttermilk"],prot:55,kcal:720},di:{icon:"🥗",slot:"Dinner",name:"Paneer bhurji + rotis",items:["200g paneer bhurji","2 whole wheat rotis","Daal tadka 1 katori","Curd 100g","Salad"],prot:50,kcal:620}},
+  2:{name:"Wednesday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"High-protein omelette",items:["5 egg whites + 2 whole eggs","1 cup oats porridge","1 apple","1 glass milk","Mixed seeds 1 tbsp"],prot:44,kcal:600},lu:{icon:"🍗",slot:"Lunch",name:"Chicken keema + rice",items:["200g chicken keema (lean)","1.5 cups brown rice","Dal 1 katori","Green veggies sabzi","Salad + curd"],prot:68,kcal:800},di:{icon:"🥩",slot:"Dinner",name:"Chicken tikka + roti",items:["150g chicken tikka grilled","2 whole wheat rotis","Paneer 50g side","Raita 100g","Salad"],prot:56,kcal:640}},
+  3:{name:"Thursday",veg:true,bf:{icon:"🥛",slot:"Breakfast",name:"Besan cheela + milk",items:["3 besan cheela","Paneer 75g filling","1 glass milk","Banana","Almonds 10–12"],prot:38,kcal:550},lu:{icon:"🧆",slot:"Lunch",name:"Chole + quinoa bowl",items:["1 cup chole chickpeas","1 cup quinoa cooked","Soya chunks 50g dry","Buttermilk 200ml","Salad"],prot:55,kcal:730},di:{icon:"🥗",slot:"Dinner",name:"Tofu stir-fry + roti",items:["200g tofu sabzi","2 whole wheat rotis","Mixed dal 1 katori","Curd 150g","Cucumber salad"],prot:49,kcal:600}},
+  4:{name:"Friday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Egg bhurji + oats",items:["4 whole eggs bhurji","1 cup oats with milk","1 banana","1 tbsp almond butter","1 glass milk"],prot:45,kcal:640},lu:{icon:"🍗",slot:"Lunch",name:"Mutton + rice combo",items:["200g mutton curry (lean)","1.5 cups brown rice","Daal 1 katori","Green veggies","Salad + curd"],prot:70,kcal:850},di:{icon:"🥩",slot:"Dinner",name:"Grilled chicken + roti",items:["150g grilled chicken","2 multigrain rotis","Paneer side 50g","Raita 100g","Salad"],prot:57,kcal:640}},
+  5:{name:"Saturday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Protein egg bowl",items:["3 boiled eggs","1 cup oats with milk","Mixed berries / banana","1 tbsp peanut butter","1 glass milk"],prot:44,kcal:610},lu:{icon:"🍗",slot:"Lunch",name:"Chicken curry + rice",items:["200g chicken curry bone-in","1.5 cups brown rice","Daal 1 katori","Mixed sabzi","Salad + curd"],prot:66,kcal:800},di:{icon:"🥩",slot:"Dinner",name:"Chicken + paneer combo",items:["100g chicken breast grilled","100g paneer curry","2 whole wheat rotis","Raita 100g","Salad"],prot:53,kcal:620}},
+  6:{name:"Sunday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Masala omelette",items:["4 whole eggs omelette","2 whole wheat toast","1 glass milk","Fruit bowl (seasonal)","Almonds 10"],prot:40,kcal:590},lu:{icon:"🍗",slot:"Lunch",name:"Chicken biryani (home)",items:["200g chicken biryani","Raita 150g","Salad + onion","Daal 1 small katori"],prot:65,kcal:820},di:{icon:"🥩",slot:"Dinner",name:"Light egg + daal dinner",items:["2 boiled eggs","2 cups daal (thick)","2 multigrain rotis","Mixed vegetable sabzi","Curd 150g"],prot:55,kcal:620}}
+};
+
+const nav = document.getElementById('dayNav');
+const tl = document.getElementById('timeline');
+
+function renderDay(d) {
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.day-btn[data-d="${d}"]`).classList.add('active');
+  const day = meals[d];
+  const vp = document.getElementById('vegPill');
+  vp.classList.toggle('show', !!day.veg);
+  const drink = morningDrinks[d];
+  const snack = eveningSnacks[d];
+  const totalProt = day.bf.prot + day.lu.prot + day.di.prot + snack.prot;
+  const totalKcal = day.bf.kcal + day.lu.kcal + day.di.kcal + snack.kcal + 10;
+  document.getElementById('cv').textContent = totalKcal.toLocaleString();
+  document.getElementById('pv').textContent = totalProt + 'g';
+  const pct = Math.min(100, Math.round(totalProt / 166 * 100));
+  document.getElementById('pb-fill').style.width = pct + '%';
+  document.getElementById('pb-txt').textContent = totalProt + 'g / 166g (' + pct + '%)';
+
+  const slots = [
+    { time: "6:00\nAM", type: "drink", dot: "#1a6b4a", icon: "🍋", name: drink.name, items: drink.items, why: drink.why },
+    { time: "7–8\nAM", type: "main", dot: "#2563eb", icon: day.bf.icon, name: day.bf.name, items: day.bf.items, prot: day.bf.prot, kcal: day.bf.kcal },
+    { time: "1–2\nPM", type: "main", dot: "#2563eb", icon: day.lu.icon, name: day.lu.name, items: day.lu.items, prot: day.lu.prot, kcal: day.lu.kcal },
+    { time: "5–6\nPM", type: "snack", dot: "#f5a623", icon: "🥜", name: snack.name, items: snack.items, prot: snack.prot, kcal: snack.kcal, why: snack.why },
+    { time: "8–9\nPM", type: "main", dot: "#2563eb", icon: day.di.icon, name: day.di.name, items: day.di.items, prot: day.di.prot, kcal: day.di.kcal }
+  ];
+
+  const slotLabels = { drink: "🌿 Morning Fat-Burn Drink", main: "🍽 Meal", snack: "⚡ Evening Snack" };
+
+  tl.innerHTML = slots.map((s, i) => {
+    const badges = s.type === 'drink'
+      ? `<span class="badge fat">Fat burn · Belly</span>`
+      : `<span class="badge prot">${s.prot}g protein</span><span class="badge kcal">${s.kcal} kcal</span>`;
+    const why = s.why ? `<div class="why">💡 ${s.why}</div>` : '';
+    return `
+    <div class="t-row">
+      ${i < slots.length - 1 ? '<div class="t-line"></div>' : ''}
+      <div class="t-time">
+        <span>${s.time}</span>
+        <div class="t-dot" style="background:${s.dot}"></div>
+      </div>
+      <div class="t-card ${s.type}">
+        <div class="slot-tag ${s.type}">${slotLabels[s.type]}</div>
+        <div class="meal-name">${s.icon} ${s.name}</div>
+        <ul class="meal-items">${s.items.map(it => `<li>${it}</li>`).join('')}</ul>
+        <div class="badges">${badges}</div>
+        ${why}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+Object.entries(meals).forEach(([d, day]) => {
+  const btn = document.createElement('button');
+  btn.className = 'day-btn' + (day.veg ? ' veg' : '');
+  btn.dataset.d = d;
+  btn.textContent = day.name.slice(0,3) + (day.veg ? ' 🌿' : '');
+  btn.addEventListener('click', () => renderDay(+d));
+  nav.appendChild(btn);
+});
+
+// Auto-select today
+const today = new Date().getDay();
+const mapped = today === 0 ? 6 : today - 1;
+renderDay(mapped);
+// Scroll active day into view
+setTimeout(() => {
+  const active = document.querySelector('.day-btn.active');
+  if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}, 100);
+</script>
+</body>
+</html>
