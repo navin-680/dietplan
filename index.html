@@ -2,240 +2,427 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My Diet Plan">
 <meta name="theme-color" content="#0f3d2e">
 <title>My Diet Plan</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --green-dark: #0f3d2e;
-    --green-mid: #1a6b4a;
-    --green-bright: #2ecc8a;
-    --green-pale: #d4f5e7;
-    --amber: #f5a623;
-    --amber-pale: #fff4dc;
-    --coral: #e8604c;
-    --coral-pale: #fdecea;
-    --blue: #2563eb;
-    --blue-pale: #eff6ff;
-    --bg: #f5f7f5;
-    --card: #ffffff;
-    --text: #111;
-    --muted: #6b7b72;
-    --border: #e2ece7;
-    --radius: 16px;
-    --radius-sm: 10px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+:root {
+  --gd: #0f3d2e; --gm: #1a6b4a; --gb: #2ecc8a; --gp: #d4f5e7;
+  --am: #f5a623; --ap: #fff4dc;
+  --co: #e8604c; --cp: #fdecea;
+  --bl: #2563eb; --bp: #eff6ff;
+  --pu: #7c3aed; --pp: #f3f0ff;
+  --bg: #f4f6f4; --card: #fff; --text: #111; --muted: #6b7b72; --border: #e0ece6;
+  --r: 18px; --rsm: 11px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
 
-  /* Header */
-  .header { background: var(--green-dark); color: white; padding: 52px 20px 20px; position: sticky; top: 0; z-index: 100; }
-  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .header h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-  .header-sub { font-size: 13px; opacity: 0.65; margin-top: 2px; }
-  .badge-green { background: var(--green-bright); color: var(--green-dark); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; font-family: 'Syne', sans-serif; }
+/* ── Layout ── */
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.header{background:var(--gd);color:#fff;padding:env(safe-area-inset-top,44px) 20px 0;flex-shrink:0;}
+.h-inner{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;}
+.h-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;letter-spacing:-.3px;}
+.h-sub{font-size:11px;opacity:.55;margin-top:1px;}
+.badge-g{background:var(--gb);color:var(--gd);font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;font-family:'Syne',sans-serif;white-space:nowrap;}
 
-  /* Macro strip */
-  .macro-strip { background: var(--green-mid); padding: 12px 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .macro-item { text-align: center; }
-  .macro-val { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: white; }
-  .macro-lbl { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 1px; text-transform: uppercase; letter-spacing: 0.05em; }
+.macro-strip{background:var(--gm);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 20px;gap:6px;flex-shrink:0;}
+.mc{text-align:center;}
+.mc-v{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;}
+.mc-l{font-size:9px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.05em;margin-top:1px;}
 
-  /* Day nav */
-  .day-nav { padding: 16px 20px 0; overflow-x: auto; display: flex; gap: 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .day-nav::-webkit-scrollbar { display: none; }
-  .day-btn { flex-shrink: 0; padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 30px; background: var(--card); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-  .day-btn.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
-  .day-btn.veg.active { background: var(--green-mid); border-color: var(--green-mid); }
+.whey-bar{background:#2d1060;padding:8px 20px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.whey-pill{background:#a78bfa;color:#1e0a3c;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.whey-bar span{font-size:11px;color:rgba(255,255,255,.8);}
 
-  /* Veg badge */
-  .veg-pill { display: none; align-items: center; gap: 6px; margin: 12px 20px 0; background: #e8f7ef; border: 1px solid #a8dfc0; border-radius: 30px; padding: 6px 14px; font-size: 12px; color: var(--green-mid); font-weight: 500; width: fit-content; }
-  .veg-pill.show { display: flex; }
+.day-nav-wrap{padding:12px 20px 0;flex-shrink:0;}
+.day-nav{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:1px;}
+.day-nav::-webkit-scrollbar{display:none;}
+.db{flex-shrink:0;padding:6px 13px;border:1.5px solid var(--border);border-radius:30px;background:var(--card);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;}
+.db.active{background:var(--gd);color:#fff;border-color:var(--gd);}
+.db.veg.active{background:var(--gm);border-color:var(--gm);}
 
-  /* Timeline */
-  .timeline { padding: 16px 20px 100px; display: flex; flex-direction: column; gap: 0; }
-  .t-row { display: grid; grid-template-columns: 56px 1fr; gap: 0; position: relative; }
-  .t-row:not(:last-child) .t-line { position: absolute; left: 56px; top: 36px; bottom: 0; width: 1.5px; background: var(--border); transform: translateX(-50%); z-index: 0; }
-  .t-time { display: flex; flex-direction: column; align-items: center; padding-top: 14px; gap: 6px; }
-  .t-time span { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.3; }
-  .t-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid white; position: relative; z-index: 1; }
-  .t-card { margin: 8px 0 8px 12px; border-radius: var(--radius); border: 1.5px solid var(--border); background: var(--card); padding: 14px 16px; transition: transform 0.15s; }
-  .t-card:active { transform: scale(0.98); }
-  .t-card.drink { border-color: #a8dfc0; background: #f0fbf5; }
-  .t-card.snack { border-color: #f5d9a0; background: var(--amber-pale); }
+.veg-pill{display:none;align-items:center;gap:5px;margin:9px 20px 0;background:#e8f7ef;border:1px solid #a8dfc0;border-radius:30px;padding:5px 13px;font-size:11px;color:var(--gm);font-weight:500;width:fit-content;}
+.veg-pill.show{display:flex;}
 
-  .slot-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
-  .slot-tag.drink { color: var(--green-mid); }
-  .slot-tag.main { color: var(--blue); }
-  .slot-tag.snack { color: #b07c10; }
+.pb-wrap{margin:10px 20px 0;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rsm);padding:10px 14px;flex-shrink:0;}
+.pb-top{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+.pb-track{background:var(--border);border-radius:4px;height:6px;}
+.pb-fill{height:6px;border-radius:4px;background:var(--gb);transition:width .5s cubic-bezier(.4,0,.2,1);}
 
-  .meal-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.3; }
-  .meal-items { list-style: none; font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 10px; }
-  .meal-items li::before { content: "· "; }
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 20px 120px;}
 
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-  .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
-  .badge.prot { background: var(--blue-pale); color: var(--blue); }
-  .badge.kcal { background: var(--coral-pale); color: var(--coral); }
-  .badge.fat { background: #e8f7ef; color: var(--green-mid); }
-  .badge.snk { background: var(--amber-pale); color: #8c6010; }
+/* ── Timeline cards ── */
+.t-row{display:grid;grid-template-columns:52px 1fr;gap:0;position:relative;}
+.t-row:not(:last-child)::after{content:'';position:absolute;left:26px;top:36px;bottom:0;width:1.5px;background:var(--border);z-index:0;}
+.t-left{display:flex;flex-direction:column;align-items:center;padding-top:12px;gap:5px;}
+.t-left span{font-size:9px;color:var(--muted);text-align:center;line-height:1.3;white-space:pre-line;}
+.t-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--bg);position:relative;z-index:1;flex-shrink:0;}
+.t-card{margin:7px 0 7px 11px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--card);overflow:hidden;cursor:pointer;transition:transform .13s,box-shadow .13s;}
+.t-card:active{transform:scale(.98);}
+.t-card.drink{border-color:#a8dfc0;background:#f0fbf5;}
+.t-card.snack{border-color:#f5d9a0;background:var(--ap);}
+.t-card.whey-card{border-color:#c4b5fd;background:var(--pp);}
 
-  .why { font-size: 11px; color: var(--green-mid); margin-top: 8px; font-style: italic; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px; }
+.card-img{width:100%;height:140px;object-fit:cover;display:block;background:#e8ede8;}
+.card-img-placeholder{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#e8f5ee,#d0ece0);}
+.card-body{padding:12px 14px 13px;}
+.slot-tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.slot-tag.drink{color:var(--gm);}
+.slot-tag.main{color:var(--bl);}
+.slot-tag.snack{color:#b07c10;}
+.slot-tag.whey{color:var(--pu);}
+.meal-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:7px;line-height:1.3;}
+.meal-items{list-style:none;font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:9px;}
+.meal-items li::before{content:"· ";}
+.badges{display:flex;flex-wrap:wrap;gap:5px;}
+.badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;}
+.b-p{background:var(--bp);color:var(--bl);}
+.b-k{background:var(--cp);color:var(--co);}
+.b-f{background:#e8f7ef;color:var(--gm);}
+.b-w{background:var(--pp);color:var(--pu);}
+.b-s{background:var(--ap);color:#8c6010;}
+.why{font-size:11px;color:var(--gm);margin-top:8px;font-style:italic;border-top:1px solid rgba(0,0,0,.06);padding-top:7px;}
+.tap-hint{font-size:10px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:4px;opacity:.7;}
 
-  /* Protein bar */
-  .pb-wrap { margin: 0 20px 20px; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
-  .pb-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .pb-track { background: var(--border); border-radius: 4px; height: 7px; }
-  .pb-fill { height: 7px; border-radius: 4px; background: var(--green-bright); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+/* ── Modal / Bottom Sheet ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:24px 24px 0 0;z-index:501;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;}
+.modal-sheet.open{transform:translateY(0);}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;}
+.modal-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:env(safe-area-inset-bottom,20px);}
+.modal-img{width:100%;height:220px;object-fit:cover;display:block;background:#e8ede8;}
+.modal-img-placeholder{width:100%;height:220px;display:flex;align-items:center;justify-content:center;font-size:72px;background:linear-gradient(135deg,#e8f5ee,#c5e8d5);}
+.modal-body{padding:20px 20px 12px;}
+.modal-slot-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:12px;line-height:1.25;}
+.modal-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.section-head{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid var(--border);}
+.ingr-list{list-style:none;margin-bottom:18px;}
+.ingr-list li{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted);}
+.ingr-list li:last-child{border-bottom:none;}
+.ingr-dot{width:7px;height:7px;border-radius:50%;background:var(--gb);flex-shrink:0;margin-top:5px;}
+.steps-list{list-style:none;margin-bottom:20px;}
+.step-item{display:flex;gap:13px;padding:10px 0;border-bottom:1px solid var(--border);}
+.step-item:last-child{border-bottom:none;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--gd);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-text{font-size:13px;color:var(--text);line-height:1.6;}
+.step-time{font-size:11px;color:var(--muted);margin-top:3px;}
+.close-btn{margin:0 20px 16px;padding:14px;background:var(--gd);color:#fff;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;width:calc(100% - 40px);letter-spacing:.02em;}
 
-  /* Bottom install hint */
-  .install-hint { position: fixed; bottom: 0; left: 0; right: 0; background: var(--green-dark); color: white; padding: 12px 20px 28px; font-size: 12px; text-align: center; opacity: 0.9; z-index: 200; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .install-hint button { background: var(--green-bright); color: var(--green-dark); border: none; border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
-  @media (min-width: 480px) {
-    .header { padding-top: 24px; }
-  }
+.install-bar{position:fixed;bottom:0;left:0;right:0;background:var(--gd);color:#fff;padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 10px);font-size:11px;text-align:center;z-index:300;display:flex;align-items:center;justify-content:center;gap:8px;}
+.install-bar button{background:var(--gb);color:var(--gd);border:none;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-top">
-    <div>
-      <h1>💪 My Diet Plan</h1>
-      <div class="header-sub">83kg · 5'7" · Strength training · Fat loss</div>
+<div id="app">
+  <div class="header">
+    <div class="h-inner">
+      <div><div class="h-title">💪 My Diet Plan</div><div class="h-sub">83kg · 5'7" · Strength + Belly Fat Loss</div></div>
+      <span class="badge-g">6 slots/day</span>
     </div>
-    <span class="badge-green">5 meals/day</span>
   </div>
+
+  <div class="macro-strip">
+    <div class="mc"><div class="mc-v" id="cv">–</div><div class="mc-l">Calories</div></div>
+    <div class="mc"><div class="mc-v" id="pv">–</div><div class="mc-l">Protein</div></div>
+    <div class="mc"><div class="mc-v">~260g</div><div class="mc-l">Carbs</div></div>
+    <div class="mc"><div class="mc-v">~62g</div><div class="mc-l">Fats</div></div>
+  </div>
+
+  <div class="whey-bar">
+    <span class="whey-pill">🥛 Whey 24g</span>
+    <span>Post-workout every day · +110 kcal</span>
+  </div>
+
+  <div class="day-nav-wrap">
+    <div class="day-nav" id="dayNav"></div>
+  </div>
+  <div class="veg-pill" id="vegPill">🌿 Vegetarian day — no meat</div>
+  <div class="pb-wrap">
+    <div class="pb-top"><span>Protein goal: 190g (food + whey)</span><span id="pb-txt">–</span></div>
+    <div class="pb-track"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="scroll-area" id="timeline"></div>
 </div>
 
-<div class="macro-strip">
-  <div class="macro-item"><div class="macro-val" id="cv">–</div><div class="macro-lbl">Calories</div></div>
-  <div class="macro-item"><div class="macro-val" id="pv">–</div><div class="macro-lbl">Protein</div></div>
-  <div class="macro-item"><div class="macro-val">~270g</div><div class="macro-lbl">Carbs</div></div>
-  <div class="macro-item"><div class="macro-val">~65g</div><div class="macro-lbl">Fats</div></div>
+<!-- Modal -->
+<div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
+<div class="modal-sheet" id="modalSheet">
+  <div class="modal-handle"></div>
+  <div class="modal-scroll" id="modalContent"></div>
 </div>
 
-<div class="day-nav" id="dayNav"></div>
-<div class="veg-pill" id="vegPill">🌿 Vegetarian day — no meat</div>
-
-<div class="pb-wrap">
-  <div class="pb-top"><span>Daily protein goal: 166g</span><span id="pb-txt">–</span></div>
-  <div class="pb-track"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
-</div>
-
-<div class="timeline" id="timeline"></div>
-
-<div class="install-hint" id="installHint">
-  📲 Add to home screen for app access &nbsp;
-  <button onclick="document.getElementById('installHint').style.display='none'">Got it</button>
+<div class="install-bar" id="installBar">
+  📲 Browser menu → "Add to Home Screen"
+  <button onclick="document.getElementById('installBar').style.display='none'">OK</button>
 </div>
 
 <script>
+// ── Unsplash image URLs (free, no key needed via source.unsplash.com) ──
+const IMG = {
+  'egg-oats':      'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&q=80',
+  'chicken-rice':  'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&q=80',
+  'egg-sweet-potato':'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80',
+  'dal-chilla':    'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=600&q=80',
+  'rajma-rice':    'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80',
+  'paneer-bhurji': 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&q=80',
+  'omelette':      'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600&q=80',
+  'keema-rice':    'https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80',
+  'chicken-tikka': 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=600&q=80',
+  'besan-cheela':  'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80',
+  'chole-quinoa':  'https://images.unsplash.com/photo-1546549097-1c97e4d03c83?w=600&q=80',
+  'tofu-stirfry':  'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80',
+  'egg-bhurji':    'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&q=80',
+  'mutton-rice':   'https://images.unsplash.com/photo-1574653853027-5382a3d23a15?w=600&q=80',
+  'chicken-sweet': 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=600&q=80',
+  'egg-bowl':      'https://images.unsplash.com/photo-1494390248081-4e521a5940db?w=600&q=80',
+  'chicken-curry': 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80',
+  'chicken-quinoa':'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80',
+  'biryani':       'https://images.unsplash.com/photo-1563379091339-03246963d596?w=600&q=80',
+  'egg-curry':     'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80',
+  'whey':          'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=600&q=80',
+  'jeera-water':   'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80',
+  'acv-water':     'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=80',
+  'ginger-water':  'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80',
+  'green-tea':     'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80',
+  'chana-snack':   'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=600&q=80',
+  'boiled-eggs':   'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80',
+  'paneer-snack':  'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&q=80',
+  'greek-yogurt':  'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80',
+  'makhana':       'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80',
+  'sprouts':       'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=80',
+  'cottage-cheese':'https://images.unsplash.com/photo-1589881133595-a3c085cb731d?w=600&q=80',
+};
+
 const morningDrinks = [
-  { name: "Jeera + lemon warm water", items: ["1 tsp cumin seeds boiled", "Juice of half lemon", "250ml warm water, empty stomach"], why: "Boosts metabolism, reduces belly bloating" },
-  { name: "ACV + lemon water", items: ["1 tbsp apple cider vinegar", "Juice of half lemon", "250ml warm water", "Pinch of cinnamon"], why: "Improves insulin sensitivity, burns visceral fat" },
-  { name: "Ginger + turmeric water", items: ["½ tsp grated ginger", "¼ tsp turmeric", "Juice of half lemon", "250ml warm water"], why: "Anti-inflammatory, targets belly fat" },
-  { name: "Cinnamon + honey water", items: ["½ tsp cinnamon powder", "1 tsp raw honey", "250ml warm water"], why: "Regulates blood sugar, reduces fat storage" },
-  { name: "Jeera + coriander detox water", items: ["1 tsp jeera seeds", "1 tsp coriander seeds (soak overnight)", "Strain and drink warm"], why: "Flushes toxins, reduces water retention" },
-  { name: "Green tea + lemon", items: ["1 cup plain green tea (no sugar)", "Juice of half lemon", "Drink 15 min before workout"], why: "EGCG in green tea directly targets belly fat" },
-  { name: "ACV + ginger shot", items: ["1 tbsp apple cider vinegar", "½ tsp grated ginger juice", "200ml warm water"], why: "Powerful fat-burn combo, suppresses appetite" }
+  { imgKey:'jeera-water', name:"Jeera + lemon warm water", items:["1 tsp cumin seeds boiled","Juice of half lemon","250ml warm water — empty stomach"], why:"Boosts metabolism, reduces belly bloating",
+    steps:[{s:"Boil 1 cup water",t:"2 min"},{s:"Add 1 tsp jeera seeds, simmer",t:"3 min"},{s:"Strain into a glass"},{s:"Squeeze half a lemon in"},{s:"Drink warm before workout"}]},
+  { imgKey:'acv-water', name:"ACV + lemon water", items:["1 tbsp apple cider vinegar","Juice of half lemon","250ml warm water","Pinch of cinnamon"], why:"Improves insulin sensitivity, burns visceral fat",
+    steps:[{s:"Warm 250ml water (not boiling)"},{s:"Add 1 tbsp apple cider vinegar"},{s:"Squeeze half a lemon"},{s:"Add pinch of cinnamon, stir"},{s:"Drink immediately on empty stomach"}]},
+  { imgKey:'ginger-water', name:"Ginger + turmeric water", items:["½ tsp grated ginger","¼ tsp turmeric","Juice of half lemon","250ml warm water"], why:"Anti-inflammatory, directly targets belly fat",
+    steps:[{s:"Grate ½ tsp fresh ginger"},{s:"Boil with 250ml water",t:"3 min"},{s:"Add ¼ tsp turmeric, stir"},{s:"Strain and add lemon juice"},{s:"Drink warm before workout"}]},
+  { imgKey:'jeera-water', name:"Cinnamon + honey water", items:["½ tsp cinnamon powder","1 tsp raw honey","250ml warm water"], why:"Regulates blood sugar, reduces fat storage",
+    steps:[{s:"Warm 250ml water"},{s:"Add ½ tsp cinnamon, stir well"},{s:"Let it cool slightly (not hot)"},{s:"Add 1 tsp raw honey, stir"},{s:"Drink on empty stomach"}]},
+  { imgKey:'jeera-water', name:"Jeera + coriander detox water", items:["1 tsp jeera seeds","1 tsp coriander seeds soaked overnight","Strain and drink warm"], why:"Flushes toxins, reduces water retention",
+    steps:[{s:"Soak jeera + coriander in water overnight"},{s:"In morning, boil the soaked water",t:"2 min"},{s:"Strain into glass"},{s:"Drink warm, empty stomach"}]},
+  { imgKey:'green-tea', name:"Green tea + lemon", items:["1 cup green tea (no sugar)","Juice of half lemon","Drink 15 min before workout"], why:"EGCG directly targets belly fat",
+    steps:[{s:"Boil water, let cool to 80°C"},{s:"Steep green tea bag",t:"2 min"},{s:"Remove bag (don't over-steep)"},{s:"Squeeze half lemon, no sugar"},{s:"Drink 15 min before workout"}]},
+  { imgKey:'acv-water', name:"ACV + ginger shot", items:["1 tbsp apple cider vinegar","½ tsp fresh ginger juice","200ml warm water"], why:"Powerful fat-burn combo, suppresses appetite",
+    steps:[{s:"Grate ginger, squeeze out ½ tsp juice"},{s:"Mix ACV + ginger juice in glass"},{s:"Add 200ml warm water"},{s:"Stir and drink quickly"}]},
 ];
 
 const eveningSnacks = [
-  { name: "Roasted chana + cucumber", items: ["50g roasted chana (Bengal gram)", "1 cup sliced cucumber", "Chaat masala + lemon"], prot: 12, kcal: 180, why: "High fibre + protein, kills evening cravings" },
-  { name: "Boiled eggs + black pepper", items: ["2 boiled eggs", "Black pepper + rock salt", "5–6 almonds on side"], prot: 14, kcal: 190, why: "Pure protein, zero carbs, keeps you full" },
-  { name: "Paneer cubes + veggies", items: ["75g raw paneer cubes", "Sliced cucumber + tomato", "Lemon + chaat masala"], prot: 15, kcal: 200, why: "Casein protein — slow digesting, fat burn overnight" },
-  { name: "Greek yogurt + seeds", items: ["150g plain Greek yogurt (no sugar)", "1 tsp flax + 1 tsp chia seeds", "Pinch of cinnamon"], prot: 14, kcal: 175, why: "Probiotic + omega-3 combo fights belly fat" },
-  { name: "Makhana + green tea", items: ["30g roasted makhana", "1 cup plain green tea", "Light salt + pepper on makhana"], prot: 5, kcal: 130, why: "Very low calorie, satisfies crunch cravings" },
-  { name: "Sprouts chaat", items: ["100g mixed sprouts (moong + chana)", "Onion + tomato + lemon", "Chaat masala + green chutney"], prot: 11, kcal: 165, why: "Enzyme-rich, excellent for fat metabolism" },
-  { name: "Cottage cheese + walnuts", items: ["100g low-fat paneer/cottage cheese", "4–5 walnut halves", "Black pepper + lemon squeeze"], prot: 16, kcal: 210, why: "Omega-3 in walnuts specifically reduces belly fat" }
+  { imgKey:'chana-snack', name:"Roasted chana + cucumber", items:["50g roasted chana","1 cup sliced cucumber","Chaat masala + lemon"], prot:12, kcal:180, why:"High fibre + protein, kills evening cravings",
+    steps:[{s:"Measure 50g roasted chana"},{s:"Slice cucumber into rounds"},{s:"Sprinkle chaat masala on chana"},{s:"Squeeze lemon on both"},{s:"Eat slowly, chew well"}]},
+  { imgKey:'boiled-eggs', name:"Boiled eggs + almonds", items:["2 boiled eggs","Black pepper + rock salt","8–10 almonds"], prot:16, kcal:200, why:"Pure protein, zero carbs — keeps you full",
+    steps:[{s:"Boil 2 eggs — 7 min for hard boil",t:"7 min"},{s:"Peel and slice in half"},{s:"Sprinkle black pepper + rock salt"},{s:"Eat with 8–10 almonds on side"}]},
+  { imgKey:'paneer-snack', name:"Paneer cubes + veggies", items:["75g raw paneer cubes","Sliced cucumber + tomato","Lemon + chaat masala"], prot:15, kcal:200, why:"Casein protein — slow digesting, fat burn overnight",
+    steps:[{s:"Cut 75g paneer into small cubes"},{s:"Slice cucumber and tomato"},{s:"Mix together in a bowl"},{s:"Add chaat masala + lemon juice"},{s:"Toss gently and serve"}]},
+  { imgKey:'greek-yogurt', name:"Greek yogurt + seeds", items:["150g plain Greek yogurt","1 tsp flax + 1 tsp chia seeds","Pinch of cinnamon"], prot:14, kcal:175, why:"Probiotic + omega-3 combo fights belly fat",
+    steps:[{s:"Take 150g plain Greek yogurt (no sugar)"},{s:"Add 1 tsp flax seeds"},{s:"Add 1 tsp chia seeds"},{s:"Sprinkle pinch of cinnamon"},{s:"Mix and eat immediately"}]},
+  { imgKey:'makhana', name:"Makhana + green tea", items:["30g roasted makhana","1 cup plain green tea","Light rock salt + black pepper"], prot:5, kcal:130, why:"Very low calorie, satisfies crunch craving",
+    steps:[{s:"Dry roast makhana on pan",t:"4 min"},{s:"Sprinkle rock salt + black pepper"},{s:"Brew green tea (no sugar)"},{s:"Snack on makhana while sipping tea"}]},
+  { imgKey:'sprouts', name:"Sprouts chaat", items:["100g mixed sprouts (moong + chana)","Onion + tomato + lemon","Chaat masala + green chutney"], prot:11, kcal:165, why:"Enzyme-rich, excellent for fat metabolism",
+    steps:[{s:"Steam or use raw sprouts"},{s:"Finely chop onion and tomato"},{s:"Mix sprouts + onion + tomato"},{s:"Add chaat masala + lemon juice"},{s:"Add green chutney, toss and serve"}]},
+  { imgKey:'cottage-cheese', name:"Cottage cheese + walnuts", items:["100g low-fat paneer","4–5 walnut halves","Black pepper + lemon squeeze"], prot:16, kcal:210, why:"Omega-3 in walnuts reduces belly fat",
+    steps:[{s:"Cut 100g paneer into cubes"},{s:"Break walnuts into halves"},{s:"Add black pepper + lemon"},{s:"Mix gently and eat"}]},
 ];
 
 const meals = {
-  0:{name:"Monday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Egg & oats power bowl",items:["4 whole eggs scrambled","1 cup rolled oats","1 banana","1 tbsp peanut butter","1 glass milk"],prot:42,kcal:620},lu:{icon:"🍗",slot:"Lunch",name:"Grilled chicken rice bowl",items:["200g grilled chicken breast","1.5 cups brown rice","Mixed veggies stir-fry","Curd 100g"],prot:68,kcal:780},di:{icon:"🥩",slot:"Dinner",name:"Paneer + egg wrap",items:["3 boiled eggs","100g paneer bhurji","2 whole wheat rotis","Cucumber raita 100g","Salad"],prot:58,kcal:620}},
-  1:{name:"Tuesday",veg:true,bf:{icon:"🥛",slot:"Breakfast",name:"Moong dal chilla",items:["3 moong dal chilla","Paneer stuffing 75g","Greek yogurt 150g","1 glass milk"],prot:40,kcal:540},lu:{icon:"🧆",slot:"Lunch",name:"Rajma rice + soya",items:["1 cup rajma curry","1.5 cups brown rice","Soya chunks 50g dry","Salad + buttermilk"],prot:55,kcal:720},di:{icon:"🥗",slot:"Dinner",name:"Paneer bhurji + rotis",items:["200g paneer bhurji","2 whole wheat rotis","Daal tadka 1 katori","Curd 100g","Salad"],prot:50,kcal:620}},
-  2:{name:"Wednesday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"High-protein omelette",items:["5 egg whites + 2 whole eggs","1 cup oats porridge","1 apple","1 glass milk","Mixed seeds 1 tbsp"],prot:44,kcal:600},lu:{icon:"🍗",slot:"Lunch",name:"Chicken keema + rice",items:["200g chicken keema (lean)","1.5 cups brown rice","Dal 1 katori","Green veggies sabzi","Salad + curd"],prot:68,kcal:800},di:{icon:"🥩",slot:"Dinner",name:"Chicken tikka + roti",items:["150g chicken tikka grilled","2 whole wheat rotis","Paneer 50g side","Raita 100g","Salad"],prot:56,kcal:640}},
-  3:{name:"Thursday",veg:true,bf:{icon:"🥛",slot:"Breakfast",name:"Besan cheela + milk",items:["3 besan cheela","Paneer 75g filling","1 glass milk","Banana","Almonds 10–12"],prot:38,kcal:550},lu:{icon:"🧆",slot:"Lunch",name:"Chole + quinoa bowl",items:["1 cup chole chickpeas","1 cup quinoa cooked","Soya chunks 50g dry","Buttermilk 200ml","Salad"],prot:55,kcal:730},di:{icon:"🥗",slot:"Dinner",name:"Tofu stir-fry + roti",items:["200g tofu sabzi","2 whole wheat rotis","Mixed dal 1 katori","Curd 150g","Cucumber salad"],prot:49,kcal:600}},
-  4:{name:"Friday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Egg bhurji + oats",items:["4 whole eggs bhurji","1 cup oats with milk","1 banana","1 tbsp almond butter","1 glass milk"],prot:45,kcal:640},lu:{icon:"🍗",slot:"Lunch",name:"Mutton + rice combo",items:["200g mutton curry (lean)","1.5 cups brown rice","Daal 1 katori","Green veggies","Salad + curd"],prot:70,kcal:850},di:{icon:"🥩",slot:"Dinner",name:"Grilled chicken + roti",items:["150g grilled chicken","2 multigrain rotis","Paneer side 50g","Raita 100g","Salad"],prot:57,kcal:640}},
-  5:{name:"Saturday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Protein egg bowl",items:["3 boiled eggs","1 cup oats with milk","Mixed berries / banana","1 tbsp peanut butter","1 glass milk"],prot:44,kcal:610},lu:{icon:"🍗",slot:"Lunch",name:"Chicken curry + rice",items:["200g chicken curry bone-in","1.5 cups brown rice","Daal 1 katori","Mixed sabzi","Salad + curd"],prot:66,kcal:800},di:{icon:"🥩",slot:"Dinner",name:"Chicken + paneer combo",items:["100g chicken breast grilled","100g paneer curry","2 whole wheat rotis","Raita 100g","Salad"],prot:53,kcal:620}},
-  6:{name:"Sunday",veg:false,bf:{icon:"🍳",slot:"Breakfast",name:"Masala omelette",items:["4 whole eggs omelette","2 whole wheat toast","1 glass milk","Fruit bowl (seasonal)","Almonds 10"],prot:40,kcal:590},lu:{icon:"🍗",slot:"Lunch",name:"Chicken biryani (home)",items:["200g chicken biryani","Raita 150g","Salad + onion","Daal 1 small katori"],prot:65,kcal:820},di:{icon:"🥩",slot:"Dinner",name:"Light egg + daal dinner",items:["2 boiled eggs","2 cups daal (thick)","2 multigrain rotis","Mixed vegetable sabzi","Curd 150g"],prot:55,kcal:620}}
+  0:{name:"Monday",veg:false,
+    bf:{imgKey:'egg-oats',icon:"🍳",slot:"Breakfast",name:"Egg & oats power bowl",items:["4 whole eggs scrambled","1 cup rolled oats cooked","1 banana","1 tbsp peanut butter","1 glass milk"],prot:42,kcal:620,
+      steps:[{s:"Boil oats with milk, stir occasionally",t:"5 min"},{s:"Scramble 4 eggs with salt, pepper, onion",t:"4 min"},{s:"Mash banana into oats or eat separately"},{s:"Add peanut butter on top of oats"},{s:"Plate together and eat warm"}]},
+    lu:{imgKey:'chicken-rice',icon:"🍗",slot:"Lunch",name:"Grilled chicken + brown rice",items:["200g chicken breast","1.5 cups brown rice","Mixed veggies stir-fry","Curd 100g"],prot:68,kcal:760,
+      steps:[{s:"Marinate chicken with turmeric, salt, jeera, lemon",t:"15 min"},{s:"Cook brown rice with 3 cups water",t:"25 min"},{s:"Grill or pan-cook chicken on medium heat",t:"6 min each side"},{s:"Stir-fry veggies in 1 tsp oil",t:"5 min"},{s:"Serve chicken over rice with curd on side"}]},
+    di:{imgKey:'egg-sweet-potato',icon:"🥩",slot:"Dinner",name:"Egg bhurji + sweet potato",items:["4 whole eggs bhurji","1 medium sweet potato boiled","Mixed veg sabzi","Curd 100g","Salad"],prot:34,kcal:520,
+      steps:[{s:"Boil sweet potato until soft",t:"15 min"},{s:"Chop onion, tomato, green chilli"},{s:"Sauté onion in ½ tsp oil, add tomato",t:"3 min"},{s:"Beat 4 eggs, pour in, scramble",t:"3 min"},{s:"Season with cumin, salt. Serve with sweet potato"}]}},
+  1:{name:"Tuesday",veg:true,
+    bf:{imgKey:'dal-chilla',icon:"🥛",slot:"Breakfast",name:"Moong dal chilla + oats",items:["3 moong dal chilla","Paneer stuffing 75g","½ cup oats porridge","1 glass milk"],prot:42,kcal:560,
+      steps:[{s:"Soak moong dal 2 hrs, blend to batter"},{s:"Grate paneer, mix with cumin + salt"},{s:"Cook oats in milk, stir",t:"5 min"},{s:"Spread chilla batter on hot tawa",t:"2 min"},{s:"Add paneer filling, fold and cook",t:"2 min"},{s:"Serve 3 chillas with oats"}]},
+    lu:{imgKey:'rajma-rice',icon:"🧆",slot:"Lunch",name:"Rajma + brown rice",items:["1 cup rajma curry","1.5 cups brown rice","Soya chunks 50g dry","Buttermilk 200ml"],prot:55,kcal:720,
+      steps:[{s:"Pressure cook soaked rajma",t:"20 min"},{s:"Sauté onion+tomato+spices for gravy",t:"8 min"},{s:"Add rajma to gravy, simmer",t:"10 min"},{s:"Soak soya chunks in hot water, drain"},{s:"Add soya to sabzi or rajma"},{s:"Serve over brown rice with buttermilk"}]},
+    di:{imgKey:'paneer-bhurji',icon:"🥗",slot:"Dinner",name:"Paneer bhurji + quinoa",items:["200g paneer bhurji","¾ cup quinoa cooked","Daal tadka","Curd 100g","Salad"],prot:52,kcal:600,
+      steps:[{s:"Cook quinoa with 1.5x water",t:"15 min"},{s:"Crumble paneer"},{s:"Sauté onion+tomato+spices",t:"5 min"},{s:"Add paneer, cook stirring",t:"4 min"},{s:"Season with coriander. Serve with quinoa + daal"}]}},
+  2:{name:"Wednesday",veg:false,
+    bf:{imgKey:'omelette',icon:"🍳",slot:"Breakfast",name:"High-protein omelette + oats",items:["5 egg whites + 2 whole eggs","1 cup oats porridge","1 apple","1 glass milk","Mixed seeds 1 tbsp"],prot:44,kcal:600,
+      steps:[{s:"Cook oats in milk until thick",t:"5 min"},{s:"Whisk 5 egg whites + 2 whole eggs"},{s:"Add salt, pepper, chopped veggies"},{s:"Cook on non-stick pan medium heat",t:"4 min"},{s:"Fold omelette. Serve with oats + apple"}]},
+    lu:{imgKey:'keema-rice',icon:"🍗",slot:"Lunch",name:"Chicken keema + brown rice",items:["200g chicken keema lean","1.5 cups brown rice","Dal 1 katori","Green veggies sabzi","Curd"],prot:68,kcal:790,
+      steps:[{s:"Cook brown rice",t:"25 min"},{s:"Sauté onion until golden",t:"5 min"},{s:"Add ginger-garlic paste, cook",t:"2 min"},{s:"Add keema, break up and cook",t:"8 min"},{s:"Add tomato+spices, simmer",t:"5 min"},{s:"Serve keema over rice with dal + curd"}]},
+    di:{imgKey:'chicken-tikka',icon:"🥩",slot:"Dinner",name:"Chicken tikka + sweet potato",items:["150g chicken tikka grilled","1 medium sweet potato boiled","Paneer 50g side","Raita 100g","Salad"],prot:52,kcal:560,
+      steps:[{s:"Marinate chicken: curd+red chilli+lemon+salt",t:"30 min"},{s:"Boil sweet potato",t:"15 min"},{s:"Grill chicken on high heat",t:"5 min each side"},{s:"Make raita: curd+cucumber+cumin"},{s:"Plate with sweet potato + salad"}]}},
+  3:{name:"Thursday",veg:true,
+    bf:{imgKey:'besan-cheela',icon:"🥛",slot:"Breakfast",name:"Besan cheela + oats",items:["3 besan cheela paneer filled","½ cup oats with milk","1 banana","Almonds 10–12"],prot:40,kcal:560,
+      steps:[{s:"Mix besan + water + spices into batter"},{s:"Cook oats in milk",t:"5 min"},{s:"Pour besan batter on hot tawa",t:"2 min"},{s:"Add grated paneer, fold cheela",t:"2 min"},{s:"Serve 3 cheelas with oats + banana"}]},
+    lu:{imgKey:'chole-quinoa',icon:"🧆",slot:"Lunch",name:"Chole + quinoa bowl",items:["1 cup chole chickpeas","1 cup quinoa cooked","Soya chunks 50g dry","Buttermilk 200ml"],prot:55,kcal:720,
+      steps:[{s:"Pressure cook soaked chole",t:"20 min"},{s:"Rinse quinoa, cook 1:1.5 water",t:"15 min"},{s:"Make chole masala: onion+tomato+spices",t:"10 min"},{s:"Soak soya chunks, drain, add to chole"},{s:"Serve chole over quinoa with buttermilk"}]},
+    di:{imgKey:'tofu-stirfry',icon:"🥗",slot:"Dinner",name:"Tofu stir-fry + brown rice",items:["200g tofu sabzi","¾ cup brown rice","Mixed dal","Curd 150g","Salad"],prot:46,kcal:570,
+      steps:[{s:"Press tofu dry, cut into cubes"},{s:"Cook brown rice",t:"25 min"},{s:"Pan-fry tofu until golden",t:"5 min"},{s:"Add onion+capsicum+soy sauce",t:"4 min"},{s:"Add Indian spices if preferred"},{s:"Serve with rice + dal + curd"}]}},
+  4:{name:"Friday",veg:false,
+    bf:{imgKey:'egg-bhurji',icon:"🍳",slot:"Breakfast",name:"Egg bhurji + oats bowl",items:["4 whole eggs bhurji","1 cup oats with milk","1 banana","1 tbsp almond butter"],prot:43,kcal:620,
+      steps:[{s:"Cook oats in milk until thick",t:"5 min"},{s:"Chop onion, tomato, green chilli"},{s:"Sauté veggies in ½ tsp oil",t:"2 min"},{s:"Scramble 4 eggs in, season",t:"3 min"},{s:"Serve bhurji + oats + banana + almond butter"}]},
+    lu:{imgKey:'mutton-rice',icon:"🍗",slot:"Lunch",name:"Mutton curry + brown rice",items:["200g mutton lean","1.5 cups brown rice","Daal 1 katori","Green veggies","Curd"],prot:70,kcal:840,
+      steps:[{s:"Marinate mutton with curd+spices",t:"30 min"},{s:"Cook brown rice",t:"25 min"},{s:"Pressure cook mutton",t:"25 min"},{s:"Make masala: onion+tomato+garam masala",t:"10 min"},{s:"Combine mutton + masala, simmer",t:"10 min"},{s:"Serve over rice with dal + curd"}]},
+    di:{imgKey:'chicken-sweet',icon:"🥩",slot:"Dinner",name:"Grilled chicken + sweet potato",items:["150g grilled chicken breast","1 medium sweet potato boiled","Paneer 50g side","Raita 100g","Green salad"],prot:53,kcal:540,
+      steps:[{s:"Marinate chicken: lemon+jeera+salt+pepper"},{s:"Boil sweet potato",t:"15 min"},{s:"Grill chicken on pan or oven",t:"6 min each side"},{s:"Make raita: curd+grated cucumber+roasted jeera"},{s:"Plate with sweet potato + salad"}]}},
+  5:{name:"Saturday",veg:false,
+    bf:{imgKey:'egg-bowl',icon:"🍳",slot:"Breakfast",name:"Masala omelette + oats",items:["4 whole eggs omelette","1 cup oats cooked with milk","Mixed berries or banana","1 glass milk"],prot:44,kcal:610,
+      steps:[{s:"Cook oats in milk",t:"5 min"},{s:"Beat 4 eggs with salt+pepper+chilli"},{s:"Add onion+tomato+coriander to eggs"},{s:"Cook omelette on pan medium heat",t:"4 min"},{s:"Serve with oats + fruit on side"}]},
+    lu:{imgKey:'chicken-curry',icon:"🍗",slot:"Lunch",name:"Chicken curry + brown rice",items:["200g chicken curry bone-in","1.5 cups brown rice","Daal 1 katori","Mixed sabzi","Curd"],prot:66,kcal:790,
+      steps:[{s:"Cook brown rice",t:"25 min"},{s:"Sauté whole spices: bay leaf, cardamom",t:"1 min"},{s:"Add onion until golden",t:"7 min"},{s:"Add chicken, cook on high",t:"5 min"},{s:"Add tomato+spices, pressure cook",t:"12 min"},{s:"Serve over rice with dal + curd"}]},
+    di:{imgKey:'chicken-quinoa',icon:"🥩",slot:"Dinner",name:"Chicken + quinoa bowl",items:["150g grilled chicken breast","¾ cup quinoa cooked","Mixed veg sabzi","Curd 150g","Salad"],prot:56,kcal:550,
+      steps:[{s:"Cook quinoa",t:"15 min"},{s:"Marinate + grill chicken",t:"12 min"},{s:"Stir-fry veggies with minimal oil",t:"5 min"},{s:"Slice chicken over quinoa"},{s:"Add sabzi + curd on side"}]}},
+  6:{name:"Sunday",veg:false,
+    bf:{imgKey:'egg-bowl',icon:"🍳",slot:"Breakfast",name:"Boiled eggs + oats bowl",items:["3 boiled eggs + 2 egg whites","1 cup oats porridge","Seasonal fruit","1 tbsp peanut butter","1 glass milk"],prot:44,kcal:610,
+      steps:[{s:"Boil eggs 7 min for hard-boiled",t:"7 min"},{s:"Cook oats in milk",t:"5 min"},{s:"Add peanut butter to oats"},{s:"Peel eggs, season with salt + pepper"},{s:"Serve with fruit bowl on side"}]},
+    lu:{imgKey:'biryani',icon:"🍗",slot:"Lunch",name:"Chicken biryani (brown rice)",items:["200g chicken in biryani","1.5 cups brown rice biryani","Raita 150g","Salad + onion"],prot:65,kcal:820,
+      steps:[{s:"Marinate chicken: curd+biryani masala+saffron",t:"30 min"},{s:"Par-boil brown rice 70%",t:"15 min"},{s:"Layer chicken and rice in heavy pot"},{s:"Dum cook on low flame",t:"25 min"},{s:"Rest before opening",t:"5 min"},{s:"Serve with raita + onion salad"}]},
+    di:{imgKey:'egg-curry',icon:"🥩",slot:"Dinner",name:"Egg curry + sweet potato",items:["3 boiled eggs in curry","1 medium sweet potato","Mixed dal","Curd 150g","Salad"],prot:36,kcal:510,
+      steps:[{s:"Boil eggs, peel and score",t:"7 min"},{s:"Boil sweet potato",t:"15 min"},{s:"Make onion-tomato masala",t:"8 min"},{s:"Add eggs to masala, simmer",t:"5 min"},{s:"Serve with sweet potato + dal + curd"}]}}
 };
 
-const nav = document.getElementById('dayNav');
-const tl = document.getElementById('timeline');
+const WHEY_PROT=24, WHEY_KCAL=110, GOAL=190;
+
+function makeImg(key, cls, h) {
+  if (!key || !IMG[key]) return `<div class="${cls}" style="height:${h}px;font-size:${h>160?72:44}px">🍽</div>`;
+  return `<img src="${IMG[key]}" class="${cls}" style="height:${h}px" onerror="this.style.display='none'" loading="lazy" alt="">`;
+}
+
+function openModal(slotData) {
+  const {type, icon, name, imgKey, items, steps, prot, kcal, why, slotLabel, dotColor} = slotData;
+  let badgesHtml = '';
+  if (type==='drink') badgesHtml=`<span class="badge b-f">🌿 Fat burn</span>`;
+  else if (type==='whey') badgesHtml=`<span class="badge b-w">💊 ${prot}g protein</span><span class="badge b-k">${kcal} kcal</span>`;
+  else badgesHtml=`<span class="badge b-p">${prot}g protein</span><span class="badge b-k">${kcal} kcal</span>`;
+
+  const stepsHtml = (steps && steps.length) ? `
+    <div class="section-head">👨‍🍳 Cooking steps</div>
+    <ol class="steps-list">${steps.map((st,i)=>`
+      <li class="step-item">
+        <div class="step-num">${i+1}</div>
+        <div><div class="step-text">${st.s}</div>${st.t?`<div class="step-time">⏱ ${st.t}</div>`:''}</div>
+      </li>`).join('')}
+    </ol>` : '';
+
+  const whyHtml = why ? `<div class="why" style="margin-bottom:16px">💡 ${why}</div>` : '';
+
+  document.getElementById('modalContent').innerHTML = `
+    ${makeImg(imgKey, 'modal-img', 220)}
+    <div class="modal-body">
+      <div class="modal-slot-tag" style="color:${dotColor}">${slotLabel}</div>
+      <div class="modal-title">${icon} ${name}</div>
+      <div class="modal-badges">${badgesHtml}</div>
+      ${whyHtml}
+      <div class="section-head">🥦 Ingredients</div>
+      <ul class="ingr-list">${items.map(it=>`<li><div class="ingr-dot"></div>${it}</li>`).join('')}</ul>
+      ${stepsHtml}
+    </div>
+    <button class="close-btn" onclick="closeModal()">✓ Got it</button>
+  `;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modalSheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('modalSheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+let startY = 0;
+const sheet = document.getElementById('modalSheet');
+sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+sheet.addEventListener('touchmove', e => {
+  const dy = e.touches[0].clientY - startY;
+  if (dy > 60) closeModal();
+});
 
 function renderDay(d) {
-  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.day-btn[data-d="${d}"]`).classList.add('active');
+  document.querySelectorAll('.db').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.db[data-d="${d}"]`).classList.add('active');
   const day = meals[d];
-  const vp = document.getElementById('vegPill');
-  vp.classList.toggle('show', !!day.veg);
+  document.getElementById('vegPill').classList.toggle('show', !!day.veg);
   const drink = morningDrinks[d];
   const snack = eveningSnacks[d];
-  const totalProt = day.bf.prot + day.lu.prot + day.di.prot + snack.prot;
-  const totalKcal = day.bf.kcal + day.lu.kcal + day.di.kcal + snack.kcal + 10;
+  const totalProt = day.bf.prot + WHEY_PROT + day.lu.prot + snack.prot + day.di.prot;
+  const totalKcal = day.bf.kcal + WHEY_KCAL + day.lu.kcal + snack.kcal + day.di.kcal + 10;
   document.getElementById('cv').textContent = totalKcal.toLocaleString();
   document.getElementById('pv').textContent = totalProt + 'g';
-  const pct = Math.min(100, Math.round(totalProt / 166 * 100));
-  document.getElementById('pb-fill').style.width = pct + '%';
-  document.getElementById('pb-txt').textContent = totalProt + 'g / 166g (' + pct + '%)';
+  const pct = Math.min(100, Math.round(totalProt/GOAL*100));
+  document.getElementById('pb-fill').style.width = pct+'%';
+  document.getElementById('pb-fill').style.background = day.veg ? '#2ecc8a' : '#2563eb';
+  document.getElementById('pb-txt').textContent = totalProt+'g / '+GOAL+'g ('+pct+'%)';
 
-  const slots = [
-    { time: "6:00\nAM", type: "drink", dot: "#1a6b4a", icon: "🍋", name: drink.name, items: drink.items, why: drink.why },
-    { time: "7–8\nAM", type: "main", dot: "#2563eb", icon: day.bf.icon, name: day.bf.name, items: day.bf.items, prot: day.bf.prot, kcal: day.bf.kcal },
-    { time: "1–2\nPM", type: "main", dot: "#2563eb", icon: day.lu.icon, name: day.lu.name, items: day.lu.items, prot: day.lu.prot, kcal: day.lu.kcal },
-    { time: "5–6\nPM", type: "snack", dot: "#f5a623", icon: "🥜", name: snack.name, items: snack.items, prot: snack.prot, kcal: snack.kcal, why: snack.why },
-    { time: "8–9\nPM", type: "main", dot: "#2563eb", icon: day.di.icon, name: day.di.name, items: day.di.items, prot: day.di.prot, kcal: day.di.kcal }
+  const slotConfigs = [
+    { time:"6:00\nAM", type:"drink", dot:"#1a6b4a", slotLabel:"🌿 Morning Drink", icon:"🍋",
+      imgKey: drink.imgKey, name: drink.name, items: drink.items, steps: drink.steps, why: drink.why },
+    { time:"7–8\nAM", type:"main", dot:"#2563eb", slotLabel:"🍽 Breakfast", ...day.bf },
+    { time:"Post\nWO", type:"whey", dot:"#7c3aed", slotLabel:"💪 Whey Shake", icon:"🥛",
+      imgKey:"whey", name:"Whey protein shake", prot:WHEY_PROT, kcal:WHEY_KCAL,
+      items:["1 scoop whey protein (24g protein)","Mix with 250ml cold water or milk","Drink within 30 min after training"],
+      steps:[{s:"Add 250ml cold water or milk to shaker"},{s:"Add 1 scoop whey protein powder"},{s:"Close lid tightly, shake vigorously",t:"30 sec"},{s:"Drink within 30 min post-workout"}]},
+    { time:"1–2\nPM", type:"main", dot:"#2563eb", slotLabel:"🍽 Lunch", ...day.lu },
+    { time:"5–6\nPM", type:"snack", dot:"#f5a623", slotLabel:"⚡ Evening Snack", icon:"🥜",
+      imgKey: snack.imgKey, name: snack.name, items: snack.items, steps: snack.steps, prot: snack.prot, kcal: snack.kcal, why: snack.why },
+    { time:"8–9\nPM", type:"main", dot:"#2563eb", slotLabel:"🍽 Dinner", ...day.di },
   ];
 
-  const slotLabels = { drink: "🌿 Morning Fat-Burn Drink", main: "🍽 Meal", snack: "⚡ Evening Snack" };
-
-  tl.innerHTML = slots.map((s, i) => {
-    const badges = s.type === 'drink'
-      ? `<span class="badge fat">Fat burn · Belly</span>`
-      : `<span class="badge prot">${s.prot}g protein</span><span class="badge kcal">${s.kcal} kcal</span>`;
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = slotConfigs.map((s, i) => {
+    let badges='';
+    if(s.type==='drink') badges=`<span class="badge b-f">Fat burn · Belly</span>`;
+    else if(s.type==='whey') badges=`<span class="badge b-w">💊 ${s.prot}g protein</span><span class="badge b-k">${s.kcal} kcal</span>`;
+    else badges=`<span class="badge b-p">${s.prot}g protein</span><span class="badge b-k">${s.kcal} kcal</span>`;
     const why = s.why ? `<div class="why">💡 ${s.why}</div>` : '';
+    const cardClass = s.type==='drink' ? 'drink' : s.type==='snack' ? 'snack' : s.type==='whey' ? 'whey-card' : '';
+    const tagClass = s.type==='whey' ? 'whey' : s.type==='main' ? 'main' : s.type;
+    const slotData = JSON.stringify(s).replace(/'/g,"&#39;");
     return `
     <div class="t-row">
-      ${i < slots.length - 1 ? '<div class="t-line"></div>' : ''}
-      <div class="t-time">
+      <div class="t-left">
         <span>${s.time}</span>
         <div class="t-dot" style="background:${s.dot}"></div>
       </div>
-      <div class="t-card ${s.type}">
-        <div class="slot-tag ${s.type}">${slotLabels[s.type]}</div>
-        <div class="meal-name">${s.icon} ${s.name}</div>
-        <ul class="meal-items">${s.items.map(it => `<li>${it}</li>`).join('')}</ul>
-        <div class="badges">${badges}</div>
-        ${why}
+      <div class="t-card ${cardClass}" onclick='openModal(${slotData})'>
+        ${makeImg(s.imgKey, 'card-img', 140)}
+        <div class="card-body">
+          <div class="slot-tag ${tagClass}">${s.slotLabel}</div>
+          <div class="meal-name">${s.icon} ${s.name}</div>
+          <ul class="meal-items">${s.items.slice(0,3).map(it=>`<li>${it}</li>`).join('')}${s.items.length>3?`<li>+${s.items.length-3} more...</li>`:''}</ul>
+          <div class="badges">${badges}</div>
+          ${why}
+          <div class="tap-hint">👆 Tap to see cooking steps</div>
+        </div>
       </div>
     </div>`;
   }).join('');
 }
 
-Object.entries(meals).forEach(([d, day]) => {
+const nav = document.getElementById('dayNav');
+Object.entries(meals).forEach(([d,day]) => {
   const btn = document.createElement('button');
-  btn.className = 'day-btn' + (day.veg ? ' veg' : '');
-  btn.dataset.d = d;
-  btn.textContent = day.name.slice(0,3) + (day.veg ? ' 🌿' : '');
-  btn.addEventListener('click', () => renderDay(+d));
+  btn.className='db'+(day.veg?' veg':'');
+  btn.dataset.d=d;
+  btn.textContent=day.name.slice(0,3)+(day.veg?' 🌿':'');
+  btn.onclick=()=>renderDay(+d);
   nav.appendChild(btn);
 });
 
-// Auto-select today
-const today = new Date().getDay();
-const mapped = today === 0 ? 6 : today - 1;
+const today=new Date().getDay();
+const mapped=today===0?6:today-1;
 renderDay(mapped);
-// Scroll active day into view
-setTimeout(() => {
-  const active = document.querySelector('.day-btn.active');
-  if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-}, 100);
+setTimeout(()=>{
+  const a=document.querySelector('.db.active');
+  if(a) a.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+},100);
 </script>
 </body>
 </html>
